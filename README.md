@@ -8,7 +8,7 @@ pip install loguru
 
 **Note**: All python modules come with a demo usage under `if __name__ == "__main__":`
 
-## `utility_ufllib.py`
+## utility_ufllib.py
 
 `ins_parser(ins_path)`:
 
@@ -28,7 +28,7 @@ pip install loguru
 - Iterate through all the instance inside the UflLib directory.
 - Return `ins_path, num_city, num_facility, opening_cost, connection_cost`
 
-## `formulations.py`
+## formulations.py
 
 `canonical_formulation(
     num_city,
@@ -57,7 +57,7 @@ pip install loguru
 
 - Return the same as `canonical_formulation()`
 
-## `test.py`
+## test.py
 
 `sol_mip_contained_in_lp(formulation, *instance, dualized=False, purify_tol=0)`:
 
