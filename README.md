@@ -43,7 +43,7 @@ pip install loguru
 
 - Return `opening_, alloc_, dual_card` if `relaxed and not dualized`; otherwise, `opening_, alloc_`
 - `dual_card` is dual value of the cardinality constraint.
-- `cardinality_param` is RHS of the cardinality constraint if `dualized`; otherwise, it is the multiplier of the cardinality constraint in the objective.
+- `cardinality_param` is RHS of the cardinality constraint if `not dualized`; otherwise, it is the multiplier of the cardinality constraint in the objective.
 
 `new_formulation(
     num_city,
@@ -63,6 +63,7 @@ pip install loguru
 `sol_mip_contained_in_lp(formulation, *instance, dualized=False, purify_tol=0)`:
 
 - returns single test pass result 
+- `*instance` is a single p-median instance, i.e., `num_city, num_facility, opening_cost, connection_cost, cardinality_param`
 - `True` if MIP opening solution is contained in ceiled LP opening solution; `False` otherwise
 
 `run_tests(ufllib_dir, test, formulation, stop=None, **kwargs)`:
