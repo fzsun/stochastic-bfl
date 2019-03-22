@@ -69,4 +69,6 @@ pip install loguru
 
 - runs tests (specified by `test` method) on all instance files found in `ufllib_dir`, using a fomulation (specified by `formulation` method), 
 - stop after `stop` number of instances
+- `**kwargs` are other keyword arguments used by the `test` method. For example, for `test = sol_mip_contained_in_lp`, `**kwargs` can be `dualized=False, purify_tol=1e-6`
 - returns `pass_counter, ins_counter`
+
