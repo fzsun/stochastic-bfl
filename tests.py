@@ -5,7 +5,7 @@ Created on Thu Mar 21 23:29:34 2019
 @author: fangzhou
 """
 
-from formulations import canonical_formulation
+from formulations import canonical_formulation, new_formulation
 from utility_ufllib import ins_parser, ufllib_iterator
 import numpy as np
 from loguru import logger
@@ -34,6 +34,7 @@ def run_tests(ufllib_dir, test, formulation, stop=None, **kwargs):
     ufllib = ufllib_iterator(ufllib_dir)
     pass_counter, ins_counter = 0, 0
     for ins_path, *ufl_instance in ufllib:
+        num_facility = ufl_instance[1]
         for cardinality_param in np.linspace(1, num_facility, num=5):
             ins_counter += 1
             if test(formulation, *ufl_instance, cardinality_param, **kwargs):
@@ -70,27 +71,25 @@ def sol_mip_contained_in_lp(formulation, *instance, dualized=False, purify_tol=0
 
 
 if __name__ == "__main__":
+    try:
+        instance = (*ins_parser('UflLib/BildeKrarup/Dq/1/D1.2'), 8.25)
+        test_result = sol_mip_contained_in_lp(canonical_formulation, *instance)
+        logger.info(f"Passed test = {test_result}")
+#        mip_result = canonical_formulation(*instance, relaxed=False, OutputFlag=True)
+#        lp_result = canonical_formulation(*instance, relaxed=True, OutputFlag=True)
+    except OSError as e:
+        logger.error(e)
 
-    (num_city, num_facility, opening_cost, connection_cost) = ins_parser(
-        "UflLib\\BildeKrarup\\B\\B1.4"
-    )
-    result = sol_mip_contained_in_lp(
-        canonical_formulation,
-        num_city,
-        num_facility,
-        opening_cost,
-        connection_cost,
-        10,
-#        dualized=True,
-#        purify_tol=1e-6,
-    )
-    print(result)
+    try:
+        results = run_tests(
+            "UflLib",
+            sol_mip_contained_in_lp,
+            canonical_formulation,
+    #        stop=50,
+    #        dualized=True,
+    #        purify_tol=1e-6,
+        )
+    except OSError as e:
+        logger.error(e)
 
-    results = run_tests(
-        "UflLib",
-        sol_mip_contained_in_lp,
-        canonical_formulation,
-        stop=50,
-        dualized=True,
-        purify_tol=1e-6,
-    )
+

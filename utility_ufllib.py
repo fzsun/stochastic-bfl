@@ -29,8 +29,8 @@ def ins_parser(ins_path):
     num_facility, num_city, _ = list(map(int, line2.split()))
     df = pd.read_csv(ins_path, sep=" ", index_col=0, header=None, skiprows=2)
     opening_cost = df[1]
-    connection_cost = df[np.arange(2, num_city + 2)]
-    return num_city, num_facility, opening_cost.to_numpy(), connection_cost.T.to_numpy()
+    connection_cost = df[np.arange(2, num_city + 2)].T
+    return num_city, num_facility, opening_cost.to_numpy(), connection_cost.to_numpy()
 
 
 def ins_path_finder(ufllib_dir):
@@ -45,7 +45,7 @@ def ins_path_finder(ufllib_dir):
         with open(list_file, "r") as f:
             for line in f:
                 ins_dir = os.path.dirname(list_file)
-                yield os.path.join(ins_dir, line.strip())
+                yield os.path.join(ins_dir, line.strip()).replace("\\", "/")
 
 
 def ufllib_iterator(ufllib_dir):
