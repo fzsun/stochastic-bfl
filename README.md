@@ -43,6 +43,7 @@ pip install loguru
 
 - Return `opening_, alloc_, dual_card` if `relaxed and not dualized`; otherwise, `opening_, alloc_`
 - `dual_card` is dual value of the cardinality constraint.
+- `cardinality_param` is RHS of the cardinality constraint if `dualized`; otherwise, it is the multiplier of the cardinality constraint in the objective.
 
 `new_formulation(
     num_city,
