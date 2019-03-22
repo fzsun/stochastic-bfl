@@ -56,7 +56,7 @@ pip install loguru
     purify_tol=0,
     OutputFlag=False):`
 
-- Return the same as `canonical_formulation()`
+- Return the same as `canonical_formulation()` except `alloc_` is replaced by `z_` variable as used in the new formulation.
 
 ## tests.py
 
