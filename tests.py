@@ -90,7 +90,7 @@ if __name__ == "__main__":
         "UflLib",
         sol_mip_contained_in_lp,
         canonical_formulation,
-#        stop=50,
+        stop=50,
         dualized=True,
         purify_tol=1e-6,
     )
