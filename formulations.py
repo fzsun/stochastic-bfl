@@ -36,8 +36,9 @@ def canonical_formulation(
     m.addConstrs(
         (alloc[i, j] <= opening[j] for i in Cities for j in Facilities), name="ct2"
     )
-    obj = LinExpr(opening_cost, opening.values())
-    obj += LinExpr(connection_cost.flatten(), alloc.values())
+
+    obj = LinExpr(connection_cost.flatten(), alloc.values())
+#    obj += LinExpr(opening_cost, opening.values())
     if dualized:
         obj += cardinality_param * opening.sum()
     else:
@@ -94,10 +95,11 @@ def new_formulation(
     )
     nf.addConstrs((z[i, K[i][-1]] == 0 for i in Cities), name="c19")
 
-    obj = LinExpr(opening_cost, opening.values())
-    obj += connection_cost_sorted[:, 0].sum() + quicksum(
+
+    obj = connection_cost_sorted[:, 0].sum() + quicksum(
         (D[i][k + 1] - D[i][k]) * z[i, k] for i in Cities for k in K[i][:-1]
     )
+#    obj += LinExpr(opening_cost, opening.values())
     if dualized:
         obj += cardinality_param * opening.sum()
     else:

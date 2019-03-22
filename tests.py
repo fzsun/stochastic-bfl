@@ -72,11 +72,13 @@ def sol_mip_contained_in_lp(formulation, *instance, dualized=False, purify_tol=0
 
 if __name__ == "__main__":
     try:
-        instance = (*ins_parser('UflLib/BildeKrarup/Dq/1/D1.2'), 8.25)
+        instance = (*ins_parser('UflLib/BildeKrarup/B/B1.7'), 25.5)
         test_result = sol_mip_contained_in_lp(canonical_formulation, *instance)
         logger.info(f"Passed test = {test_result}")
 #        mip_result = canonical_formulation(*instance, relaxed=False, OutputFlag=True)
 #        lp_result = canonical_formulation(*instance, relaxed=True, OutputFlag=True)
+#        mip_result = new_formulation(*instance, relaxed=False, OutputFlag=True)
+#        lp_result = new_formulation(*instance, relaxed=True, OutputFlag=True)
     except OSError as e:
         logger.error(e)
 
