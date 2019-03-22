@@ -58,7 +58,7 @@ pip install loguru
 
 - Return the same as `canonical_formulation()`
 
-## test.py
+## tests.py
 
 `sol_mip_contained_in_lp(formulation, *instance, dualized=False, purify_tol=0)`:
 
