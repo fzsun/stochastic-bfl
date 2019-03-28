@@ -129,15 +129,16 @@ if __name__ == "__main__":
         (num_city, num_facility, opening_cost, connection_cost) = ins_parser(
             "UflLib\\BildeKrarup\\B\\B1.4"
         )
+        cardinality_param = 5
         result = canonical_formulation(
             num_city,
             num_facility,
             opening_cost,
             connection_cost,
-            10,
+            cardinality_param,
 #            dualized=True,
             relaxed=True,
-            purify_tol=1e-6,
+#            purify_tol=1e-6,
             OutputFlag=True
         )
         print(f"{'='*80}\n")
@@ -150,7 +151,7 @@ if __name__ == "__main__":
             num_facility,
             opening_cost,
             connection_cost,
-            10,
+            cardinality_param,
 #            dualized=True,
             relaxed=True,
             purify_tol=1e-6,
