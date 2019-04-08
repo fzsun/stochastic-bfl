@@ -38,7 +38,8 @@ def run_tests(ufllib_dir, test, formulation, seed=None, stop=None, **kwargs):
     for ins_path, *ufl_instance in ufllib:
         num_facility = ufl_instance[1]
         card_param_set = [1, num_facility]
-        card_param_set[1:1] =  np.random.uniform(1, num_facility, 3).round(3)
+#        card_param_set[1:1] =  np.random.uniform(1, num_facility, 3).round(3)
+        card_param_set[1:1] =  np.random.choice(num_facility-2, 3, replace=False) + 2
         card_param_set = sorted(card_param_set)
         for cardinality_param in card_param_set:
             ins_counter += 1
@@ -84,7 +85,16 @@ def sol_mip_contained_in_lp(formulation, *instance, dualized=False, purify_tol=0
         purify_tol=purify_tol,
         OutputFlag=False,
     )
-    return all(mip_result[0] <= np.ceil(lp_result[0]))
+    # remove no-flow facilities
+    mip_opening, mip_connection = mip_result
+    mip_has_flow = mip_connection.sum(axis=0).clip(0, 1)
+    mip_valid_opening = mip_opening * mip_has_flow
+
+    lp_opening, lp_connection = lp_result[:2]
+    lp_has_flow = lp_connection.sum(axis=0).clip(0, 1)
+    lp_valid_opening = lp_has_flow * np.ceil(lp_opening)
+
+    return all(mip_valid_opening <= lp_valid_opening)
 
 
 if __name__ == "__main__":
@@ -105,8 +115,8 @@ if __name__ == "__main__":
     try:
         results = run_tests(
             "UflLib",
-#            sol_mip_contained_in_lp,
-            dual_match_lambda,
+            sol_mip_contained_in_lp,
+#            dual_match_lambda,
             canonical_formulation,
             seed=1
 #            stop=50,
