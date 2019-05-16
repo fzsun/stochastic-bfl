@@ -4,6 +4,7 @@ Created on Wed Apr 24 13:45:20 2019
 
 @author: fangzhou
 
+The current code uses a cut loop approach to add Benders cuts.
 TODO:
     1. Accelerate Benders using one-tree Benders (lazy constraint callback).
     2. Apply parallelism for subproblem.
@@ -137,16 +138,14 @@ def master_cutloop(
         prob_new, alpha_new = scenario_reduction(
             val_history, prob_new, alpha_new, agg_method="max"
         )
-        # TODO: revise model accordingly
+
         # Add Benders cuts
         for i in range(len(scenarios)):
-            if prob_new[i] == 0:
-                v[i].obj = 0  # effectively, this scenario is removed
-            else:
-                rhs = dual_ct1s[i].sum() + LinExpr(
-                    dual_ct2s[i].sum(axis=0), opening.values()
-                )
-                m.addConstr(v[i] + eta >= rhs)
+            v[i].obj = prob_new[i]/(1-alpha_new)
+            rhs = dual_ct1s[i].sum() + LinExpr(
+                dual_ct2s[i].sum(axis=0), opening.values()
+            )
+            m.addConstr(v[i] + eta >= rhs)
         num_scns = len(prob_new.nonzero()[0])
         logger.info(f"Cutloop#{itr} #scn={num_scns}, alpha_new={alpha_new:.3f} VaR={VaR:.1f}, actual_obj={actual_total_obj:.1f} lb={lb:.1f} ub={ub:.1f}")
 def loop_scenario(Cities, Facilities, opening_, probabilities, scenarios):
